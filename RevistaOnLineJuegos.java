@@ -29,7 +29,8 @@ public class RevistaOnLineJuegos
 	 * Devuelve true si el array está completo, false en otro caso
 	 */
 	public boolean estaCompleta() {
-		 
+		
+	    return true;
 	}
 
 	/**
