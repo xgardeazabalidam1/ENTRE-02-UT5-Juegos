@@ -15,7 +15,18 @@ public class Juego {
      *  Esta información se encuentra en linea
      */
     public Juego(String linea) {
-        
+        valoraciones = new int[10];
+        String[] constructor = linea.split(SEPARADOR);
+        for (int i = 0; i < constructor.length; i++){
+            constructor[i] = constructor[i].trim();
+        }//quitar espacios
+        for (int i = 0; i < valoraciones.length; i++){
+            valoraciones[i] = Integer.parseInt(constructor[i + 3]);
+        }//añadir valoraciones
+        titulo = constructor[0];//añadido titulo
+        constructor[1] = constructor[1].toUpperCase();//cambiar a mayúsculas sino no se cambia
+        genero = Genero.valueOf(constructor[1]);//añadir genero
+        year = Integer.parseInt(constructor[2]);//añadir año de juego
     }
 
     /**
