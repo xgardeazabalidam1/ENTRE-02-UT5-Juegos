@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-
 /**
  * La clase representa a una tienda on-line en la
  * que se publican los juegos que se van lanzando al mercado
@@ -14,7 +13,6 @@ public class RevistaOnLineJuegos
 {
     private String nombre;
     private Juego[] juegos;
-    private int total;
     private int pos;
     /**
      * Constructor  
@@ -22,9 +20,8 @@ public class RevistaOnLineJuegos
      * e inicializa el resto de atributos
      */
     public RevistaOnLineJuegos(String nombre, int n) {
-        nombre = "";
+        this.nombre = nombre;
         juegos = new Juego[n];
-        total = 0;
         pos = 0;
     }
 
@@ -47,7 +44,7 @@ public class RevistaOnLineJuegos
      *    
      */
     public void add(Juego juego) {
-        if(existeJuego(juego.getTitulo()) == -1){
+        if(existeJuego(juego.getTitulo()) != -1){
             System.out.print("Ya está ese título añadido");
         }
         else if(estaCompleta()){
@@ -57,21 +54,21 @@ public class RevistaOnLineJuegos
             for(int i = 0; i < pos; i++){ 
                 if(juegos[i].getTitulo().compareTo(juego.getTitulo()) < 0){
                     juegos[i] = juego;
+                    pos++;
                 }
             }
-            pos++;
         }
     }
 
     /**
      * Efectúa una búsqueda en el array del juego cuyo titulo se
-     * recibe como parámetro. Es ndiferente mayúsculas y minúsculas
+     * recibe como parámetro. Es indiferente mayúsculas y minúsculas
      * Si existe el juego devuelve su posición, si no existe devuelve -1
      */
     public int existeJuego(String titulo) {
-        for(int i = 0; i < pos; i++){
-            if(juegos[i].getTitulo().compareToIgnoreCase(titulo) != 0){
-                return i;   
+        for (int i = 0; i < pos; i++){
+            if (juegos[i].getTitulo().equalsIgnoreCase(titulo)){
+                return i;
             }
         }
         return -1;
@@ -98,7 +95,12 @@ public class RevistaOnLineJuegos
      *  Si el juego no existe se muestra un mensaje en pantalla
      */
     public void puntuar(String titulo, int puntuacion) {
-
+        if(existeJuego(titulo) == -1){
+            puntuar(titulo, puntuacion);
+        }
+        else if(existeJuego(titulo) != -1){
+            System.out.print("No se ha encontrado el juego" + titulo);
+        }
     }
 
     /**
@@ -108,17 +110,34 @@ public class RevistaOnLineJuegos
      * El array se devuelve todo en mayúsculas y ordenado ascendentemente
      */
     public String[] valoracionMayorQue(double valoracion) {
-
-        return null;
+        String[] aprobados = new String[juegos.length];
+        int auxpos = 0;
+        for(int i = 0; i < pos; i++){
+            if(juegos[i].getValoracionMedia() > valoracion){
+                aprobados[auxpos] = juegos[i].getTitulo();
+                auxpos++;
+            }
+        }
+        return aprobados;
     }
 
     /**
      * Borrar los juegos del género indicado devolviendo
-     * el nº de juegos borradas
+     * el nº de juegos borrados
      */
     public int borrarDeGenero(Genero genero) {
-
-        return 0;
+        int total = 0;
+        int p = 0;//posicion
+        for(int i = 0; i < pos; i++){
+            if(juegos[i].getGenero() == genero){
+                for(int j = i + 1; i < pos; i++){
+                    juegos[j - 1] = juegos[j];
+                    pos --;
+                    total++;
+                }
+            }
+        }
+        return total;
     }
 
     /**
